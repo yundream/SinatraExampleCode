@@ -1,4 +1,5 @@
 # encoding: utf-8
+require 'json'
 
 class MyApp < Sinatra::Application
 	# 간단 라우트 예제
@@ -29,4 +30,33 @@ class MyApp < Sinatra::Application
 	get "/example/3/*/*" do | path, category |
 		"Hello #{path} : #{category}"
 	end
+
+	# simple erb
+	get "/example/erb/1" do
+		@name = "yundream"
+		erb :erbexample01
+	end
+
+	# simple erb 2
+	get "/example/erb/*/to/*" do  | @path, @file |
+		time = Time.new
+		@updatetime = time.strftime("%Y-%m-%d %H:%M:%S")
+		erb :erbexample02
+	end
+
+	# json sample
+	# sudo gem install json
+	# require 'json'
+	get "/example/erb/json" do 
+		content_type :json
+		{:name=>'yundream', :address=>'Korea seoul', :company=>'KTCloudware'}.to_json 
+	end
+
+	# HTTP Error code handling
+	get "/example/error" do 
+		content_type :json
+		response.status=453
+		{:result=>'453', :msg=>'unknown error'}.to_json 
+	end
+######################################################
 end
